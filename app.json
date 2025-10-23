@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "RT Interpreter",
+    "slug": "rt-interpreter",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": {},
+    "web": { "bundler": "metro" },
+    "extra": {
+      "eas": { "projectId": "local-dev" },
+      "smartcatKey": "${EXPO_PUBLIC_SMARTCAT_API_KEY}",
+      "smartcatBaseUrl": "${EXPO_PUBLIC_SMARTCAT_BASE_URL}",
+      "apiBaseUrl": "${EXPO_PUBLIC_API_BASE_URL}"
+    }
+  }
+}
