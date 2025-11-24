@@ -4,11 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import { initErrorLogging } from './setupErrorLogging';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { colors } from './styles/global';
-
 import TranslatorScreen from './screens/TranslatorScreen';
 import HistoryScreen from './screens/HistoryScreen';
 
