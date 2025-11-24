@@ -132,9 +132,6 @@ export default function App() {
     try {
       let out = '';
       try {
-        const OPENAI_API_KEY = 'sk-6aHrjvR1nsJE0E1yOEeiDyIa1wZOmCIGF8zVrFZVAz6KGUqR';
-        const OPENAI_BASE_URL = 'https://gpt1.shupremium.com/v1';
-
         const sourceLanguage = sourceLang === 'auto' ? 'vi' : sourceLang;
         const targetLanguage = targetLang;
 
