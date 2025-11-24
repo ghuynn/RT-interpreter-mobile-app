@@ -114,35 +114,31 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   modalContent: {
-    backgroundColor: colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: colors.background,  // ← Light gray
+    borderRadius: 16,
+    width: '85%',
     maxHeight: '70%',
-    paddingBottom: 20
+    padding: 0,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
-  },
-  modalTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.text
-  },
-  languageList: {
-    padding: 8
+    borderBottomColor: colors.borderLight,
+    backgroundColor: colors.background,  // ← Light gray
   },
   languageItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 14,
-    borderRadius: 8,
-    marginBottom: 4
+    gap: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    backgroundColor: colors.background,  // ← Light gray
   },
   languageItemSelected: {
     backgroundColor: '#f1f5f9'
