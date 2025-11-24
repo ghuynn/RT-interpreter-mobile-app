@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { Language } from '../types/translation.types';
-import { globalStyles, colors } from '../styles/global';
+import { colors } from '../styles/global';
+
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+}
 
 interface Props {
   title: string;
@@ -17,73 +29,81 @@ export const LanguageSelector: React.FC<Props> = ({
   languages,
   selectedLanguage,
   onLanguageSelect,
-  excludeAuto = false
+  excludeAuto = false,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  
+  const [isVisible, setIsVisible] = useState(false);
+
   const displayLanguages = excludeAuto
-    ? languages.filter(lang => lang.code !== 'auto')
+    ? languages.filter((lang) => lang.code !== 'auto')
     : languages;
 
-  const selectedLang = languages.find(l => l.code === selectedLanguage);
+  const selectedLang = languages.find((lang) => lang.code === selectedLanguage);
+
+  const openModal = () => setIsVisible(true);
+  const closeModal = () => setIsVisible(false);
+
+  const selectLanguage = (code: string) => {
+    onLanguageSelect(code);
+    closeModal();
+  };
+
+  const renderLanguageItem = ({ item }: { item: Language }) => {
+    const isSelected = item.code === selectedLanguage;
+    return (
+      <TouchableOpacity
+        style={[styles.languageItem, isSelected && styles.languageItemSelected]}
+        onPress={() => selectLanguage(item.code)}
+      >
+        <Text style={styles.languageItemFlag}>{item.flag}</Text>
+        <Text style={styles.languageItemText}>{item.name}</Text>
+        {isSelected && (
+          <MaterialIcons name="check" size={24} color={colors.primary} style={styles.checkIcon} />
+        )}
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <View style={globalStyles.section}>
-      <Text style={globalStyles.sectionTitle}>{title}</Text>
-      
-      <TouchableOpacity 
-        style={styles.dropdownButton}
-        onPress={() => setModalVisible(true)}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.dropdownButtonText}>
-          {selectedLang?.flag} {selectedLang?.name}
-        </Text>
-        <MaterialIcons name="arrow-drop-down" size={24} color="#64748b" />
+    <View style={styles.container}>
+      <Text style={styles.label}>{title}</Text>
+      <TouchableOpacity style={styles.selector} onPress={openModal}>
+        <View style={styles.selectedLanguage}>
+          <Text style={styles.flag}>{selectedLang?.flag}</Text>
+          <Text style={styles.languageName}>{selectedLang?.name}</Text>
+        </View>
+        <MaterialIcons name="arrow-drop-down" size={24} color={colors.text} />
       </TouchableOpacity>
 
       <Modal
-        visible={modalVisible}
+        visible={isVisible}
         transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
+        animationType="fade"
+        onRequestClose={closeModal}
       >
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.modalOverlay}
           activeOpacity={1}
-          onPress={() => setModalVisible(false)}
+          onPress={closeModal}
         >
           <View style={styles.modalContent} onStartShouldSetResponder={() => true}>
+            {/* Modern Header with Close Button */}
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{title}</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <MaterialIcons name="close" size={24} color="#64748b" />
+              <TouchableOpacity
+                style={styles.closeIconButton}
+                onPress={closeModal}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <MaterialIcons name="close" size={28} color={colors.text} />
               </TouchableOpacity>
             </View>
-            
-            <ScrollView style={styles.languageList}>
-              {displayLanguages.map((lang) => (
-                <TouchableOpacity
-                  key={lang.code}
-                  style={[
-                    styles.languageItem,
-                    selectedLanguage === lang.code && styles.languageItemSelected
-                  ]}
-                  onPress={() => {
-                    onLanguageSelect(lang.code);
-                    setModalVisible(false);
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.languageItemText}>
-                    {lang.flag} {lang.name}
-                  </Text>
-                  {selectedLanguage === lang.code && (
-                    <MaterialIcons name="check" size={20} color="#667eea" />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+
+            <FlatList
+              data={displayLanguages}
+              keyExtractor={(item) => item.code}
+              renderItem={renderLanguageItem}
+              style={styles.languageList}
+            />
           </View>
         </TouchableOpacity>
       </Modal>
@@ -92,64 +112,107 @@ export const LanguageSelector: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  dropdownButton: {
+  container: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 8,
+  },
+  selector: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 8,
+    justifyContent: 'space-between',
+    backgroundColor: colors.surface,
+    padding: 14,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 14,
-    height: 50
   },
-  dropdownButtonText: {
-    fontSize: 15,
+  selectedLanguage: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  flag: {
+    fontSize: 24,
+  },
+  languageName: {
+    fontSize: 16,
     color: colors.text,
-    fontWeight: '500'
+    fontWeight: '500',
   },
+
+  // Modal styles - More compact
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'flex-end'
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   modalContent: {
-    backgroundColor: colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '70%',
-    paddingBottom: 20
+    backgroundColor: colors.surface,
+    borderRadius: 16,              // ← Reduced from 20
+    width: '100%',
+    maxWidth: 500,
+    maxHeight: '75%',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,         // ← Reduced from 20
+    paddingVertical: 14,           // ← Reduced from 18
     borderBottomWidth: 1,
-    borderBottomColor: colors.border
+    borderBottomColor: colors.borderLight,
+    backgroundColor: colors.surface,
   },
   modalTitle: {
-    fontSize: 16,
+    fontSize: 18,                  // ← Reduced from 20
     fontWeight: '700',
-    color: colors.text
+    color: colors.text,
+    flex: 1,
+  },
+  closeIconButton: {
+    padding: 4,
+    marginLeft: 8,                 // ← Reduced from 12
   },
   languageList: {
-    padding: 8
+    maxHeight: 500,
   },
   languageItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 14,
-    borderRadius: 8,
-    marginBottom: 4
+    paddingHorizontal: 16,         // ← Reduced from 20
+    paddingVertical: 12,           // ← Reduced from 16
+    gap: 12,                       // ← Reduced from 14
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    backgroundColor: colors.surface,
   },
   languageItemSelected: {
-    backgroundColor: '#f1f5f9'
+    backgroundColor: 'rgba(25, 149, 173, 0.08)',
+  },
+  languageItemFlag: {
+    fontSize: 28,                  // ← Reduced from 32
   },
   languageItemText: {
-    fontSize: 15,
+    fontSize: 16,                  // ← Reduced from 17
     color: colors.text,
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+    flex: 1,
+  },
+  checkIcon: {
+    marginLeft: 'auto',
+  },
 });
+

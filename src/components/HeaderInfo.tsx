@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../styles/global';
+import { APP_INFO } from '../config/appInfo';
 
 interface Props {
   appName?: string;
@@ -8,15 +9,11 @@ interface Props {
   copyrightYear?: string;
 }
 
-export const HeaderInfo: React.FC<Props> = ({ 
-  appName = 'AI Translator',
-  version = '1.0.0',
-  copyrightYear = '2025'
-}) => {
+export const HeaderInfo: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        {appName} v{version} © {copyrightYear}
+        {APP_INFO.name} v{APP_INFO.version} © {APP_INFO.copyrightYear} by {APP_INFO.author}
       </Text>
     </View>
   );
