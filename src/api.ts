@@ -114,6 +114,7 @@ export async function getTranslationHistory(
   page: number = 1
 ): Promise<TranslationListResponse> {
   try {
+    console.log('Fetching translation history from:', `${API_BASE_URL}/translations`);
     const response = await fetch(
       `${API_BASE_URL}/translations?userId=${userId}&limit=${limit}&page=${page}`
     );
@@ -123,8 +124,24 @@ export async function getTranslationHistory(
     }
 
     return await response.json();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching translation history:', error);
+    
+    // If backend is not available, return empty history instead of crashing
+    if (error.message.includes('Network request failed') || error.message.includes('Failed to fetch')) {
+      console.warn('Backend not available, returning empty history');
+      return {
+        success: false,
+        data: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 0,
+          totalItems: 0,
+          itemsPerPage: limit
+        }
+      };
+    }
+    
     throw error;
   }
 }
