@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  // Modal styles - Redesigned
+  // Modal styles - More compact
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -155,10 +155,10 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.surface,
-    borderRadius: 20,
+    borderRadius: 16,              // ← Reduced from 20
     width: '100%',
     maxWidth: 500,
-    maxHeight: '80%',
+    maxHeight: '75%',
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
@@ -170,21 +170,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 18,
+    paddingHorizontal: 16,         // ← Reduced from 20
+    paddingVertical: 14,           // ← Reduced from 18
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
     backgroundColor: colors.surface,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 18,                  // ← Reduced from 20
     fontWeight: '700',
     color: colors.text,
     flex: 1,
   },
   closeIconButton: {
     padding: 4,
-    marginLeft: 12,
+    marginLeft: 8,                 // ← Reduced from 12
   },
   languageList: {
     maxHeight: 500,
@@ -192,21 +192,21 @@ const styles = StyleSheet.create({
   languageItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    gap: 14,
+    paddingHorizontal: 16,         // ← Reduced from 20
+    paddingVertical: 12,           // ← Reduced from 16
+    gap: 12,                       // ← Reduced from 14
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
     backgroundColor: colors.surface,
   },
   languageItemSelected: {
-    backgroundColor: 'rgba(25, 149, 173, 0.08)',  // Very light teal
+    backgroundColor: 'rgba(25, 149, 173, 0.08)',
   },
   languageItemFlag: {
-    fontSize: 32,
+    fontSize: 28,                  // ← Reduced from 32
   },
   languageItemText: {
-    fontSize: 17,
+    fontSize: 16,                  // ← Reduced from 17
     color: colors.text,
     fontWeight: '500',
     flex: 1,
@@ -215,3 +215,4 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
   },
 });
+
