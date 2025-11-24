@@ -17,6 +17,7 @@ import { initErrorLogging } from './setupErrorLogging';
 import { getTargetLanguage } from './config';
 import { saveTranslation, getTranslationHistory } from './api';
 import * as Speech from 'expo-speech';
+import { ENV } from './config/env';
 
 // Import components
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -147,11 +148,11 @@ export default function App() {
         const timeoutId2 = setTimeout(() => controller.abort(), 15000);
 
         try {
-          const res = await fetch(`${OPENAI_BASE_URL}/chat/completions`, {
+          const res = await fetch(`${ENV.OPENAI_BASE_URL}/chat/completions`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${OPENAI_API_KEY}`
+              Authorization: `Bearer ${ENV.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
               model: 'gpt-3.5-turbo',
