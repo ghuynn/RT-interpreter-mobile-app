@@ -21,23 +21,10 @@ export const TranslationHistory: React.FC<Props> = ({ history, onSpeak }) => {
   }
 
   return (
-    <FlatList
-      data={history}
-      renderItem={({ item }) => <HistoryItem item={item} onSpeak={onSpeak} />}
-      keyExtractor={(item) => item._id}
-      scrollEnabled={true}
-      nestedScrollEnabled={false}
-      style={styles.historyList}
-      contentContainerStyle={styles.historyListContent}
-    />
+    <View>
+      {history.map((item) => (
+        <HistoryItem key={item._id} item={item} onSpeak={onSpeak} />
+      ))}
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  historyList: {
-    maxHeight: 500
-  },
-  historyListContent: {
-    paddingBottom: 10
-  }
-});
