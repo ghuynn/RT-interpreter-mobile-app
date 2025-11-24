@@ -155,7 +155,7 @@ export default function App() {
               Authorization: `Bearer ${ENV.OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-              model: 'gpt-3.5-turbo',
+              model: 'gpt-4o-mini',
               messages: messages,
               temperature: 0.7,
               max_tokens: 150
@@ -265,7 +265,10 @@ export default function App() {
       setTranslationHistory(response.data);
     } catch (error) {
       console.error('Failed to load history:', error);
+      // Set empty history instead of crashing
       setTranslationHistory([]);
+      // Optional: Show a user-friendly message
+      console.log('History feature unavailable - continuing without history');
     }
   }
 

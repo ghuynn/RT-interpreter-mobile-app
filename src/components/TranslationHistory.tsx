@@ -26,7 +26,7 @@ export const TranslationHistory: React.FC<Props> = ({ history, onSpeak }) => {
       renderItem={({ item }) => <HistoryItem item={item} onSpeak={onSpeak} />}
       keyExtractor={(item) => item._id}
       scrollEnabled={true}
-      nestedScrollEnabled={true}
+      nestedScrollEnabled={false}
       style={styles.historyList}
       contentContainerStyle={styles.historyListContent}
     />
