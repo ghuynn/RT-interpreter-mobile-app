@@ -21,4 +21,8 @@ Prototype app to record speech, transcribe with OpenAI Whisper API, and translat
 - Keys with `EXPO_PUBLIC_` are bundled in the app; use only for prototypes. For production, proxy via your backend.
 
 
+## Chạy app
 
+- Mở file .env điền IPv4 Wifi port 3000
+- Mở terminal cd backend, npm run dev
+- Mở terminal mới npm start
