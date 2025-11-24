@@ -1,4 +1,5 @@
 export const ENV = {
-    OPENAI_API_KEY: 'sk-65J8pyI84pXapQseLiI9VnI7R2vKnJQbGYIHDeJ57tMRIAXj',
-    OPENAI_BASE_URL: 'https://gpt1.shupremium.com/v1'
-  };
+  API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL || '',
+  OPENAI_API_KEY: process.env.EXPO_PUBLIC_OPENAI_API_KEY || '',
+  OPENAI_BASE_URL: process.env.EXPO_PUBLIC_OPENAI_BASE_URL || '',
+};
