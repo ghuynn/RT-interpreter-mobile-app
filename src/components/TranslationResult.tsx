@@ -17,7 +17,7 @@ export const TranslationResult: React.FC<Props> = ({
         Translation results ({targetLanguageName})
       </Text>
       <Text style={globalStyles.resultText}>
-        {translatedText || 'Chưa có kết quả dịch...'}
+        {translatedText || 'Not yet available...'}
       </Text>
     </View>
   );
