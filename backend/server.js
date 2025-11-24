@@ -7,7 +7,12 @@ const translationRoutes = require('./routes/translations');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 // Simple request logging to terminal
 app.use((req, res, next) => {
@@ -58,10 +63,23 @@ mongoose.connect(config.MONGODB_URI, {
 
 // Start server
 const PORT = config.PORT;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {  // ← Add '0.0.0.0' here
   console.log(`Server is running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/api/health`);
   console.log(`Translations API: http://localhost:${PORT}/api/translations`);
+  
+  // Add network IP info
+  const os = require('os');
+  const networkInterfaces = os.networkInterfaces();
+  const addresses = [];
+  for (const name of Object.keys(networkInterfaces)) {
+    for (const net of networkInterfaces[name]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        addresses.push(net.address);
+      }
+    }
+  }
+  console.log(`\n📱 For mobile device, use: <http://${addresses>[0] || 'YOUR_IP'}:${PORT}/api/health\n`);
 });
 
 module.exports = app;
