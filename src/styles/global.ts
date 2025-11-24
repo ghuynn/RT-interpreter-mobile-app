@@ -1,35 +1,34 @@
 import { StyleSheet } from 'react-native';
 
 export const colors = {
-  // Background
-  background: '#f9fafb',
-  surface: '#ffffff',
-  
-  // Text
-  text: '#1e293b',
-  textSecondary: '#64748b',
-  textTertiary: '#94a3b8',
-  
-  // Borders
-  border: '#e2e8f0',
-  borderLight: '#e5e7eb',
-  
-  // Primary
-  primary: '#667eea',
-  primaryHover: '#764ba2',
-  
-  // Status
-  success: '#10b981',
-  error: '#ef4444',
-  warning: '#f59e0b',
-  
-  // Backgrounds
-  inputBg: '#f8fafc',
-  cardBg: '#f8fafc',
-  
-  // Misc
-  white: '#ffffff',
-  black: '#111827',
+  // Main palette - Your custom colors
+  primary: '#1995AD',        // Teal Blue - Professional and trustworthy
+  secondary: '#A1D6E2',      // Light Blue - Soft and friendly
+  background: '#F1F1F2',     // Light Gray - Clean and modern
+  surface: '#FFFFFF',        // White - Cards and containers
+
+  // Text colors - Adjusted for readability
+  text: '#2C3E50',           // Dark gray - High contrast on light background
+  textSecondary: '#5A6C7D',  // Medium gray - Secondary information
+
+  // Semantic colors
+  error: '#E74C3C',          // Red
+  success: '#1995AD',        // Primary color
+  warning: '#F39C12',        // Orange
+  info: '#3498DB',           // Blue
+
+  // UI elements
+  border: '#A1D6E2',         // Secondary color for borders
+  borderLight: '#D1E8ED',    // Very light version for subtle borders
+
+  // Button states
+  primaryHover: '#167A8F',   // 10% darker than primary
+  primaryActive: '#125F73',  // 20% darker than primary
+  secondaryHover: '#8BC9D9', // 10% darker than secondary
+  secondaryActive: '#76BDD0', // 20% darker than secondary
+
+  // Button text
+  btnPrimaryText: '#FFFFFF', // White text on primary buttons
 };
 
 export const globalStyles = StyleSheet.create({
