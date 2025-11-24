@@ -25,4 +25,4 @@ Prototype app to record speech, transcribe with OpenAI Whisper API, and translat
 
 - Mở file .env điền IPv4 Wifi port 3000
 - Mở terminal cd backend, npm run dev
-- Mở terminal mới npm start
+- Mở terminal mới npx expo start --clear
