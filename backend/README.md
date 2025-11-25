@@ -51,13 +51,15 @@ The server will start on the port specified in your `.env` file (default: 3000).
 ### Translation Schema
 
     {
+    _id: String, // Object ID
     originalText: String, // Original text
     translatedText: String, // Translated text
     sourceLanguage: String, // Source language (default: 'auto')
     targetLanguage: String, // Target language
     translationMethod: String, // 'voice' or 'manual'
-    timestamp: Date, // Creation timestamp
     userId: String // User ID (default: 'anonymous')
+    timestamp: Date, // Creation timestamp
+    __v: version key // MongooseDB
     }
 
 ## 💡 Usage Examples
@@ -67,12 +69,16 @@ The server will start on the port specified in your `.env` file (default: 3000).
     POST /api/translations
     Content-Type: application/json
 
-    {
-    "originalText": "Hello world",
-    "translatedText": "Xin chào thế giới",
-    "targetLanguage": "vi",
-    "translationMethod": "manual"
-    }
+    
+    _id:ObjectId('68f7bc3f37fc0301f339101f¨')
+    originalText: "Moikka, nimeni on Huy"
+    translatedText: "Hei, ilo tutustua Huy!"
+    sourceLanguage: "auto"
+    targetLanguage: "vi"
+    translationMethod: "manual"
+    userId: "anonymous"
+    timestamp: 2025-10-21T17:00:47.906+00:00
+    __v: 0
 
 ### Get translation history
 

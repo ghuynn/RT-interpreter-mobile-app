@@ -32,7 +32,7 @@ app.use('/api/translations', translationRoutes);
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
-    message: 'AppDich Backend is running',
+    message: 'RT-interpreter-mobile-app Backend is running',
     timestamp: new Date().toISOString()
   });
 });
