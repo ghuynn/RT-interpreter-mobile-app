@@ -21,64 +21,94 @@ import { getTargetLanguage } from '../config';
 import { APP_INFO } from '../config/appInfo';
 
 const LANGUAGE_CODES: { [key: string]: string } = {
-  'en': 'en-US',
-  'vi': 'vi-VN',
-  'zh': 'zh-CN',
-  'ja': 'ja-JP',
-  'ko': 'ko-KR',
-  'th': 'th-TH',
-  'fr': 'fr-FR',
-  'de': 'de-DE',
-  'es': 'es-ES',
-  'it': 'it-IT',
-  'pt': 'pt-PT',
-  'ru': 'ru-RU',
-  'ar': 'ar-SA',
-  'hi': 'hi-IN',
-  'id': 'id-ID',
-  'fi': 'fi-FI',
-  'sv': 'sv-SE',
-  'no': 'no-NO',
-  'da': 'da-DK',
-  'tr': 'tr-TR',
-  'pl': 'pl-PL',
-  'nl': 'nl-NL',
-  'cs': 'cs-CZ',
-  'sk': 'sk-SK',
-  'ms': 'ms-MY',
-  'tl': 'tl-PH',
+  'en': 'en-US', 'vi': 'vi-VN', 'fi': 'fi-FI', 'sv': 'sv-SE', 'no': 'no-NO',
+  'da': 'da-DK', 'is': 'is-IS', 'de': 'de-DE', 'fr': 'fr-FR', 'es': 'es-ES',
+  'it': 'it-IT', 'pt': 'pt-PT', 'nl': 'nl-NL', 'pl': 'pl-PL', 'cs': 'cs-CZ',
+  'sk': 'sk-SK', 'ru': 'ru-RU', 'uk': 'uk-UA', 'bg': 'bg-BG', 'ro': 'ro-RO',
+  'hu': 'hu-HU', 'hr': 'hr-HR', 'sr': 'sr-RS', 'sl': 'sl-SI', 'lt': 'lt-LT',
+  'lv': 'lv-LV', 'et': 'et-EE', 'tr': 'tr-TR', 'el': 'el-GR', 'ca': 'ca-ES',
+  'zh': 'zh-CN', 'ja': 'ja-JP', 'ko': 'ko-KR', 'th': 'th-TH', 'id': 'id-ID',
+  'ms': 'ms-MY', 'tl': 'tl-PH', 'hi': 'hi-IN', 'bn': 'bn-BD', 'ur': 'ur-PK',
+  'ta': 'ta-IN', 'te': 'te-IN', 'ar': 'ar-SA', 'he': 'he-IL', 'fa': 'fa-IR',
+  'af': 'af-ZA', 'sw': 'sw-KE', 'zu': 'zu-ZA', 'am': 'am-ET',
 };
+
 
 export default function TranslatorScreen() {
   const languages = [
-    { code: 'auto', name: 'Auto detect', flag: '🌐' },
-    { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'fi', name: 'Suomi', flag: '🇫🇮' },
-    { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
-    { code: 'no', name: 'Norsk', flag: '🇳🇴' },
-    { code: 'da', name: 'Dansk', flag: '🇩🇰' },
-    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-    { code: 'pt', name: 'Português', flag: '🇵🇹' },
-    { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
-    { code: 'pl', name: 'Polski', flag: '🇵🇱' },
-    { code: 'cs', name: 'Čeština', flag: '🇨🇿' },
-    { code: 'sk', name: 'Slovenčina', flag: '🇸🇰' },
-    { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-    { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
-    { code: 'ar', name: 'العربية', flag: '🇸🇦' },
-    { code: 'zh', name: '中文', flag: '🇨🇳' },
-    { code: 'ja', name: '日本語', flag: '🇯🇵' },
-    { code: 'ko', name: '한국어', flag: '🇰🇷' },
-    { code: 'th', name: 'ไทย', flag: '🇹🇭' },
-    { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-    { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
-    { code: 'ms', name: 'Bahasa Melayu', flag: '🇲🇾' },
-    { code: 'tl', name: 'Filipino', flag: '🇵🇭' }
-  ];
+  // Auto-detect
+  { code: 'auto', name: 'Auto detect', flag: '🌐' },
+
+  // Priority: Vietnamese & English
+  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+
+  // Nordic Languages
+  { code: 'fi', name: 'Suomi', flag: '🇫🇮' },
+  { code: 'sv', name: 'Svenska', flag: '🇸🇪' },
+  { code: 'no', name: 'Norsk', flag: '🇳🇴' },
+  { code: 'da', name: 'Dansk', flag: '🇩🇰' },
+  { code: 'is', name: 'Íslenska', flag: '🇮🇸' },
+
+  // Western European
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' },
+  { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
+
+  // Eastern European
+  { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+  { code: 'cs', name: 'Čeština', flag: '🇨🇿' },
+  { code: 'sk', name: 'Slovenčina', flag: '🇸🇰' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'uk', name: 'Українська', flag: '🇺🇦' },
+  { code: 'bg', name: 'Български', flag: '🇧🇬' },
+  { code: 'ro', name: 'Română', flag: '🇷🇴' },
+  { code: 'hu', name: 'Magyar', flag: '🇭🇺' },
+  { code: 'hr', name: 'Hrvatski', flag: '🇭🇷' },
+  { code: 'sr', name: 'Српски', flag: '🇷🇸' },
+  { code: 'sl', name: 'Slovenščina', flag: '🇸🇮' },
+  { code: 'lt', name: 'Lietuvių', flag: '🇱🇹' },
+  { code: 'lv', name: 'Latviešu', flag: '🇱🇻' },
+  { code: 'et', name: 'Eesti', flag: '🇪🇪' },
+
+  // Southern European & Mediterranean
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+  { code: 'el', name: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'ca', name: 'Català', flag: '🇪🇸' },
+
+  // East Asian
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+
+  // Southeast Asian
+  { code: 'th', name: 'ไทย', flag: '🇹🇭' },
+  { code: 'id', name: 'Bahasa Indonesia', flag: '🇮🇩' },
+  { code: 'ms', name: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'tl', name: 'Filipino', flag: '🇵🇭' },
+
+  // South Asian
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'bn', name: 'বাংলা', flag: '🇧🇩' },
+  { code: 'ur', name: 'اردو', flag: '🇵🇰' },
+  { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
+  { code: 'te', name: 'తెలుగు', flag: '🇮🇳' },
+
+  // Middle Eastern
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'he', name: 'עברית', flag: '🇮🇱' },
+  { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
+
+  // African
+  { code: 'af', name: 'Afrikaans', flag: '🇿🇦' },
+  { code: 'sw', name: 'Kiswahili', flag: '🇰🇪' },
+  { code: 'zu', name: 'isiZulu', flag: '🇿🇦' },
+  { code: 'am', name: 'አማርኛ', flag: '🇪🇹' },
+];
+
 
   const defaultTarget = getTargetLanguage();
   const [targetLang, setTargetLang] = useState(defaultTarget);

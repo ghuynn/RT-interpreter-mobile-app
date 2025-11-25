@@ -1,81 +1,127 @@
-# AppDich Backend
+# RT-interpreter-mobile-app Backend
 
-Backend API cho ứng dụng dịch thuật AppDich, sử dụng Node.js, Express và MongoDB.
+Backend API for Real-time Interpreter mobile application built with Node.js, Express, and MongoDB.
 
-## Cài đặt
+## 📦 Prerequisites
 
-1. Cài đặt dependencies:
-```bash
-cd backend
-npm install
-```
+- Node.js (v14 or higher)
+- MongoDB Atlas account
+- npm or yarn
 
-2. Cấu hình MongoDB:
-- Thay thế `<db_password>` trong file `config.js` bằng mật khẩu thực tế của bạn
-- Hoặc tạo file `.env` với nội dung:
-```
-MONGODB_URI=mongodb+srv://caoman26_db_user:YOUR_PASSWORD@cluster0.nulruvo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-PORT=3000
-```
+## 🛠️ Installation
 
-3. Chạy server:
-```bash
-# Development mode
-npm run dev
+### 1. Install dependencies
 
-# Production mode
-npm start
-```
+    cd backend
+    npm install
 
-## API Endpoints
+### 2. Configure environment variables
+
+The backend automatically loads environment variables from the root `.env` file. Ensure your root `.env` contains:
+
+    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/
+    PORT=3000
+
+### 3. Start the server
+
+Development mode with auto-reload
+    
+    npm run dev
+
+Production mode
+
+    npm start
+
+The server will start on the port specified in your `.env` file (default: 3000).
+
+## 🌐 API Endpoints
 
 ### Health Check
-- `GET /api/health` - Kiểm tra trạng thái server
+- `GET /api/health` – Check server status
 
 ### Translations
-- `POST /api/translations` - Lưu bản dịch mới
-- `GET /api/translations` - Lấy danh sách lịch sử dịch
-- `GET /api/translations/:id` - Lấy bản dịch cụ thể
-- `DELETE /api/translations/:id` - Xóa bản dịch
-- `DELETE /api/translations/user/:userId` - Xóa tất cả lịch sử của user
+- `POST /api/translations` – Save new translation
+- `GET /api/translations` – Get translation history with pagination
+- `GET /api/translations/:id` – Get specific translation by ID
+- `DELETE /api/translations/:id` – Delete specific translation
+- `DELETE /api/translations/user/:userId` – Delete all translations for a user
 
-## Cấu trúc dữ liệu
+## 📊 Data Structure
 
 ### Translation Schema
-```javascript
-{
-  originalText: String,        // Văn bản gốc
-  translatedText: String,      // Văn bản đã dịch
-  sourceLanguage: String,      // Ngôn ngữ nguồn (mặc định: 'auto')
-  targetLanguage: String,      // Ngôn ngữ đích
-  translationMethod: String,   // 'voice' hoặc 'manual'
-  timestamp: Date,            // Thời gian tạo
-  userId: String              // ID người dùng (mặc định: 'anonymous')
-}
-```
 
-## Sử dụng
+    {
+    originalText: String, // Original text
+    translatedText: String, // Translated text
+    sourceLanguage: String, // Source language (default: 'auto')
+    targetLanguage: String, // Target language
+    translationMethod: String, // 'voice' or 'manual'
+    timestamp: Date, // Creation timestamp
+    userId: String // User ID (default: 'anonymous')
+    }
 
-### Lưu bản dịch
-```javascript
-POST /api/translations
-Content-Type: application/json
+## 💡 Usage Examples
 
-{
-  "originalText": "Hello world",
-  "translatedText": "Xin chào thế giới",
-  "targetLanguage": "vi",
-  "translationMethod": "manual"
-}
-```
+### Save a translation
 
-### Lấy lịch sử dịch
-```javascript
-GET /api/translations?userId=anonymous&limit=50&page=1
-```
+    POST /api/translations
+    Content-Type: application/json
 
-## Kết nối với Frontend
+    {
+    "originalText": "Hello world",
+    "translatedText": "Xin chào thế giới",
+    "targetLanguage": "vi",
+    "translationMethod": "manual"
+    }
 
-Frontend React Native sẽ gọi API tại `http://localhost:3000/api` khi chạy trên máy local, hoặc thay đổi URL trong file `src/api.ts` để trỏ đến server production.
+### Get translation history
 
+    GET /api/translations?userId=anonymous&limit=50&page=1
 
+**Response:**
+
+    {
+    "translations": [...],
+    "pagination": {
+    "total": 150,
+    "page": 1,
+    "limit": 50,
+    "pages": 3
+    }
+    }
+
+## 🔗 Frontend Integration
+
+The React Native frontend connects to this API at:
+
+- **Development:** `http://localhost:3000/api`
+- **Production:** Configure the base URL in `frontend/src/api.ts`
+
+Make sure the backend server is running before starting the mobile app.
+
+## 📂 Project Structure
+
+    backend/
+    ├── routes/
+    │ ├── config.js # Environment configuration
+    │ ├── translations.js # Translation routes
+    │ └── health.js # Health check routes
+    ├── models/
+    │ └── Translation.js # MongoDB schema
+    ├── server.js # Express server entry point
+    └── package.json
+
+## ⚠️ Error Handling
+
+All endpoints return consistent error responses:
+
+    {
+    "error": "Error message description"
+    }
+
+**Common status codes:**
+- `200` – Success
+- `201` – Created
+- `400` – Bad Request
+- `404` – Not Found
+- `500` – Server Error

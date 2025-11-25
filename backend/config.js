@@ -1,6 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 module.exports = {
-  MONGODB_URI: process.env.MONGODB_URI || 'mongodb+srv://giahuyngngoc_db_user:DtTKR7EGRFlFjOsu@appdich.xvnqneq.mongodb.net/',
+  MONGODB_URI: process.env.MONGODB_URI,
   PORT: process.env.PORT || 3000
 };
