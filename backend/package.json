@@ -1,7 +1,7 @@
 {
-  "name": "appdich-backend",
+  "name": "rt-interpreter-mobile-app-backend",
   "version": "1.0.0",
-  "description": "Backend for AppDich translation app",
+  "description": "Backend for RT-interpreter-mobile-app app",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
