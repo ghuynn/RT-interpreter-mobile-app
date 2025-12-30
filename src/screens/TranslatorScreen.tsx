@@ -362,7 +362,6 @@ export default function TranslatorScreen() {
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
         <View>
           <View style={styles.languageRow}>
-            <Text style={styles.languageTitle}>From Language</Text>
             <View style={styles.buttonGroup}>
               <TouchableOpacity
                 onPress={handleSwapLanguages}
@@ -389,7 +388,7 @@ export default function TranslatorScreen() {
           </View>
 
           <LanguageSelector
-            title=""
+            title="From Language"
             languages={languages}
             selectedLanguage={sourceLang}
             onLanguageSelect={setSourceLang}
@@ -475,9 +474,9 @@ const styles = StyleSheet.create({
   },
   languageRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   languageTitle: {
     fontSize: 14,
