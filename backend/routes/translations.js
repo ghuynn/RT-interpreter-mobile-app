@@ -3,11 +3,13 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Translation = require('../models/Translation');
 
-// Lưu lịch sử dịch
+// ============================================
+// POST - Save translation
+// ============================================
 router.post('/', async (req, res) => {
   try {
     const { originalText, translatedText, sourceLanguage, targetLanguage, translationMethod, userId } = req.body;
-    
+
     // Check if MongoDB is connected
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({
@@ -16,7 +18,7 @@ router.post('/', async (req, res) => {
         data: null
       });
     }
-    
+
     const translation = new Translation({
       originalText,
       translatedText,
@@ -41,11 +43,13 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Lấy lịch sử dịch
+// ============================================
+// GET - Fetch all translations
+// ============================================
 router.get('/', async (req, res) => {
   try {
     const { userId = 'anonymous', limit = 50, page = 1 } = req.query;
-    
+
     const translations = await Translation
       .find({ userId })
       .sort({ timestamp: -1 })
@@ -73,11 +77,61 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Lấy một bản dịch cụ thể
+// ============================================
+// DELETE - Delete all user translations
+// IMPORTANT: This MUST be BEFORE /:id route!
+// ============================================
+router.delete('/user/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Validate userId
+    if (!userId || userId.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'User ID is required'
+      });
+    }
+
+    console.log(`[API] Deleting all translations for user: ${userId}`);
+
+    // Check if MongoDB is connected
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available',
+        deletedCount: 0
+      });
+    }
+
+    // Delete all translations for the user
+    const result = await Translation.deleteMany({ userId });
+
+    console.log(`[API] Successfully deleted ${result.deletedCount} translations for user: ${userId}`);
+
+    res.json({
+      success: true,
+      message: `Deleted ${result.deletedCount} translations`,
+      deletedCount: result.deletedCount
+    });
+  } catch (error) {
+    console.error('[API] Error deleting user translations:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting user history',
+      error: error.message,
+      deletedCount: 0
+    });
+  }
+});
+
+// ============================================
+// GET - Fetch single translation by ID
+// ============================================
 router.get('/:id', async (req, res) => {
   try {
     const translation = await Translation.findById(req.params.id);
-    
+
     if (!translation) {
       return res.status(404).json({
         success: false,
@@ -98,11 +152,13 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Xóa một bản dịch
+// ============================================
+// DELETE - Delete single translation by ID
+// ============================================
 router.delete('/:id', async (req, res) => {
   try {
     const translation = await Translation.findByIdAndDelete(req.params.id);
-    
+
     if (!translation) {
       return res.status(404).json({
         success: false,
@@ -123,25 +179,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Xóa tất cả lịch sử của user
-router.delete('/user/:userId', async (req, res) => {
-  try {
-    const result = await Translation.deleteMany({ userId: req.params.userId });
-    
-    res.json({
-      success: true,
-      message: `Deleted ${result.deletedCount} translations`,
-      deletedCount: result.deletedCount
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error deleting user translations',
-      error: error.message
-    });
-  }
-});
-
 module.exports = router;
-
-

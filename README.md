@@ -3,7 +3,7 @@
 AI-powered mobile translator supporting 49 languages with text-to-speech and cloud history.
 
 ## ⚙️ Overview
-- RT Interpreter is a cross-platform mobile app delivering instant translations via OpenAI GPT-4o-mini. Features include automatic speech synthesis, persistent cloud history, and support for 27 languages.
+- RT Interpreter is a cross-platform mobile app delivering instant translations via OpenAI GPT-4o-mini. Features include automatic speech synthesis, persistent cloud history, and support for 49 languages.
 - Architecture: React Native frontend → Node.js/Express API → MongoDB Atlas.
 
 ## 🚀 Features
