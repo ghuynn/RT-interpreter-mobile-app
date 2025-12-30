@@ -9,9 +9,10 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { X, Trash2 } from 'lucide-react-native';
+import { X, Trash2, Settings } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, globalStyles } from '../styles/global';
+import { deleteAllHistory } from '../api';
 
 interface SettingsScreenProps {
   onClose: () => void;
@@ -79,7 +80,7 @@ export default function SettingsScreen({ onClose, onSettingsChange }: SettingsSc
   const handleClearAllData = () => {
     Alert.alert(
       'Clear All Data',
-      'Are you sure you want to delete all saved translations? This cannot be undone.',
+      'This will delete all saved translations from both online database and local storage. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -87,10 +88,31 @@ export default function SettingsScreen({ onClose, onSettingsChange }: SettingsSc
           style: 'destructive',
           onPress: async () => {
             try {
-              await AsyncStorage.removeItem('translationHistory');
-              Alert.alert('Success', 'All data cleared');
-            } catch (error) {
-              Alert.alert('Error', 'Failed to clear data');
+              setLoading(true);
+
+              const result = await deleteAllHistory('anonymous');
+
+              if (result.success) {
+                Alert.alert(
+                  'Success',
+                  `Deleted ${result.deletedOnline} online and ${result.deletedLocal} local translations`,
+                  [{ text: 'OK' }]
+                );
+              } else {
+                Alert.alert(
+                  'Partial Success',
+                  result.message,
+                  [{ text: 'OK' }]
+                );
+              }
+            } catch (error: any) {
+              console.error('Error clearing all data:', error);
+              Alert.alert(
+                'Error',
+                error.message || 'Failed to clear data'
+              );
+            } finally {
+              setLoading(false);
             }
           },
         },
@@ -108,9 +130,12 @@ export default function SettingsScreen({ onClose, onSettingsChange }: SettingsSc
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header - With Settings Icon */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <View style={styles.headerLeft}>
+          <Settings size={20} color={colors.primary} />
+          <Text style={styles.headerTitle}>Settings</Text>
+        </View>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
           <X size={24} color={colors.text} />
         </TouchableOpacity>
@@ -199,9 +224,16 @@ export default function SettingsScreen({ onClose, onSettingsChange }: SettingsSc
           <TouchableOpacity
             style={styles.dangerButton}
             onPress={handleClearAllData}
+            disabled={loading}
           >
-            <Trash2 size={18} color="#EF4444" />
-            <Text style={styles.dangerButtonText}>Clear All Data</Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#EF4444" />
+            ) : (
+              <>
+                <Trash2 size={18} color="#EF4444" />
+                <Text style={styles.dangerButtonText}>Clear All Data</Text>
+              </>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -220,8 +252,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
+    paddingTop: 50,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   headerTitle: {
     fontSize: 18,

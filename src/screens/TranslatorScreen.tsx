@@ -12,7 +12,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { CircleX, ArrowLeftRight, Menu } from 'lucide-react-native';
+import { CircleX, ArrowLeftRight, Settings } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { saveTranslation } from '../api';
 import * as Speech from 'expo-speech';
@@ -244,7 +244,9 @@ export default function TranslatorScreen() {
         await speak(out);
       }
 
-      // Save based on settings
+      // ============================================
+      // FIXED: Save based on settings (ONLY ONE)
+      // ============================================
       if (settings?.historySaveMode !== 'none') {
         const translation = {
           originalText: manualText.trim(),
@@ -257,20 +259,20 @@ export default function TranslatorScreen() {
           saveMode: settings?.historySaveMode || 'online',
         };
 
-        // Save to local
-        if (settings?.historySaveMode === 'local' || settings?.historySaveMode === 'online') {
+        if (settings?.historySaveMode === 'local') {
+          // Save ONLY to local storage
           try {
             const existingHistory = await AsyncStorage.getItem('translationHistory');
             const history = existingHistory ? JSON.parse(existingHistory) : [];
             history.push(translation);
             await AsyncStorage.setItem('translationHistory', JSON.stringify(history));
+            console.log('Saved to LOCAL storage only');
           } catch (error) {
             console.error('Error saving to local:', error);
           }
         }
-
-        // Save to online DB
-        if (settings?.historySaveMode === 'online') {
+        else if (settings?.historySaveMode === 'online') {
+          // Save ONLY to online DB
           try {
             await saveTranslation({
               originalText: manualText.trim(),
@@ -280,6 +282,7 @@ export default function TranslatorScreen() {
               translationMethod: 'manual',
               userId: 'anonymous'
             });
+            console.log('Saved to ONLINE database only');
           } catch (error) {
             console.error('Error saving to online:', error);
           }
@@ -380,7 +383,7 @@ export default function TranslatorScreen() {
                 style={styles.menuButton}
                 onPress={openSettings}
               >
-                <Menu size={20} color={colors.text} />
+                <Settings size={20} color={colors.text} />
               </TouchableOpacity>
             </View>
           </View>

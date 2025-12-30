@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Xác định API base URL linh hoạt theo môi trường
 function resolveApiBaseUrl(): string {
@@ -177,3 +178,99 @@ export async function deleteUserHistory(userId: string): Promise<void> {
     throw error;
   }
 }
+
+// ============================================
+// DELETE ALL HISTORY FUNCTION
+// ============================================
+
+/**
+ * Delete all translation history (both online and local)
+ * @param userId - User ID (default: 'anonymous')
+ * @returns Promise with success status and deleted count
+ */
+export async function deleteAllHistory(userId: string = 'anonymous'): Promise<{
+  success: boolean;
+  message: string;
+  deletedOnline: number;
+  deletedLocal: number;
+}> {
+  let deletedOnline = 0;
+  let deletedLocal = 0;
+  let hasError = false;
+  let errorMessage = '';
+
+  try {
+    // Step 1: Delete Online History
+    try {
+      console.log(`[API] Deleting all online history for user: ${userId}`);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timeout')), 15000)
+      );
+
+      const deletePromise = fetch(`${API_BASE_URL}/translations/user/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const response = await Promise.race([deletePromise, timeoutPromise]) as Response;
+
+      if (response.ok) {
+        const result = await response.json();
+        deletedOnline = result.deletedCount || 0;
+        console.log(`[API] Successfully deleted ${deletedOnline} online records`);
+      } else if (response.status === 404) {
+        console.warn('[API] No online history found or endpoint not available');
+        deletedOnline = 0;
+      } else {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (onlineError: any) {
+      console.warn('[API] Error deleting online history:', onlineError);
+      // Don't fail entirely if online deletion fails
+      if (!onlineError.message.includes('Network request failed') &&
+          !onlineError.message.includes('timeout')) {
+        hasError = true;
+        errorMessage = `Online deletion error: ${onlineError.message}`;
+      }
+    }
+
+    // Step 2: Delete Local History
+    try {
+      console.log('[API] Deleting all local history');
+      const localData = await AsyncStorage.getItem('translationHistory');
+      if (localData) {
+        const localHistory = JSON.parse(localData);
+        deletedLocal = localHistory.length;
+        await AsyncStorage.removeItem('translationHistory');
+        console.log(`[API] Successfully deleted ${deletedLocal} local records`);
+      } else {
+        console.log('[API] No local history found');
+        deletedLocal = 0;
+      }
+    } catch (localError: any) {
+      console.error('[API] Error deleting local history:', localError);
+      hasError = true;
+      errorMessage = `Local deletion error: ${localError.message}`;
+    }
+
+    return {
+      success: !hasError,
+      message: hasError
+        ? `Partial deletion: ${deletedOnline} online, ${deletedLocal} local. Error: ${errorMessage}`
+        : `Successfully deleted ${deletedOnline} online and ${deletedLocal} local records`,
+      deletedOnline,
+      deletedLocal,
+    };
+  } catch (error: any) {
+    console.error('[API] Unexpected error during deleteAllHistory:', error);
+    return {
+      success: false,
+      message: `Failed to delete history: ${error.message}`,
+      deletedOnline: 0,
+      deletedLocal: 0,
+    };
+  }
+}
+
